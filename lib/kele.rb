@@ -113,7 +113,7 @@ class Kele
       "enrollment_id": @my_enrollment_id
     }
 
-    response = self.class.post("/#{checkpoint_submission_id}", body: body, headers: { "authorization" => @auth_token})
+    response = self.class.post("/:#{checkpoint_submission_id}", body: body, headers: { "authorization" => @auth_token})
 
     submission_response_body = JSON.parse(response.body)
     pretty = JSON.pretty_generate submission_response_body
