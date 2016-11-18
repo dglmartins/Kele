@@ -103,7 +103,7 @@ class Kele
     puts pretty
   end
 
-  def update_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment)
+  def update_submission(assignment_branch, assignment_commit_link, checkpoint_id, checkpoint_submission_id, comment)
     self.get_me
     body = {
       "assignment_branch": assignment_branch,
@@ -113,7 +113,7 @@ class Kele
       "enrollment_id": @my_enrollment_id
     }
 
-    response = self.class.post("/:#{checkpoint_id}", body: body, headers: { "authorization" => @auth_token})
+    response = self.class.post("/#{checkpoint_submission_id}", body: body, headers: { "authorization" => @auth_token})
 
     submission_response_body = JSON.parse(response.body)
     pretty = JSON.pretty_generate submission_response_body
