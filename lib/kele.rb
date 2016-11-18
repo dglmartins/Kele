@@ -86,11 +86,11 @@ class Kele
 
   end
 
-  def create_submission(assignment_branch, assigment_commit_link, checkpoint_id, comment)
+  def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment)
     self.get_me
     body = {
       "assignment_branch": assignment_branch,
-      "assigment_commit_link": assigment_commit_link,
+      "assignment_commit_link": assignment_commit_link,
       "checkpoint_id": checkpoint_id,
       "comment": comment,
       "enrollment_id": @my_enrollment_id
