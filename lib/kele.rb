@@ -15,6 +15,9 @@ class Kele
     auth_response = self.class.post("/sessions", options)
 
     @auth_response_body = JSON.parse(auth_response.body)
+    
+    pretty = JSON.pretty_generate @auth_response_body
+    puts pretty
 
     @auth_token = @auth_response_body["auth_token"]
   end
@@ -23,6 +26,8 @@ class Kele
     response = self.class.get("/users/me", headers: { "authorization" => @auth_token })
     @me_response_body = JSON.parse(response.body)
     @my_id = @me_response_body["id"]
+    pretty = JSON.pretty_generate @me_response_body
+    puts pretty
 
     @my_mentor_id = @me_response_body["current_enrollment"]["mentor_id"]
   end
@@ -32,7 +37,8 @@ class Kele
     response = self.class.get("/mentors/#{@my_mentor_id}/student_availability", headers: { "authorization" => @auth_token })
 
     availability_response_body = JSON.parse(response.body)
-    puts availability_response_body
+    pretty = JSON.pretty_generate availability_response_body
+    puts pretty
   end
 
 end
