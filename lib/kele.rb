@@ -6,16 +6,17 @@ class Kele
   base_uri 'https://www.bloc.io/api/v1'
 
   def initialize(email, password)
+    @email = email
     options = {
         body: {
-          email: email,
+          email: @email,
           password: password
         }
     }
     auth_response = self.class.post("/sessions", options)
 
     @auth_response_body = JSON.parse(auth_response.body)
-    
+
     pretty = JSON.pretty_generate @auth_response_body
     puts pretty
 
@@ -39,6 +40,49 @@ class Kele
     availability_response_body = JSON.parse(response.body)
     pretty = JSON.pretty_generate availability_response_body
     puts pretty
+  end
+
+  def get_messages(page = nil)
+    response_array = []
+    response = self.class.get("/message_threads", headers: { "authorization" => @auth_token})
+    messages_response_body = JSON.parse(response.body)
+    count = messages_response_body["count"]
+    ceil = (count/10.to_f).ceil
+    if page == nil
+      (ceil).times do |ciel|
+        response = self.class.get("/message_threads", body: {"page": (ciel+1)}, headers: { "authorization" => @auth_token})
+        messages_response_body = JSON.parse(response.body)
+        response_array[ciel] = messages_response_body
+      end
+      pretty = JSON.pretty_generate response_array
+      puts pretty
+    else
+      response = self.class.get("/message_threads", body: {"page": page}, headers: { "authorization" => @auth_token})
+      messages_response_body = JSON.parse(response.body)
+      pretty = JSON.pretty_generate messages_response_body
+      puts pretty
+    end
+  end
+
+  def create_message(token, subject, stripped_text)
+    self.get_me
+    sender = @email
+    recipient_id = @my_mentor_id
+
+    body = {
+      "sender": sender,
+      "recipient_id": recipient_id,
+      "token": token,
+      "subject": subject,
+      "stripped-text": stripped_text
+    }
+
+    response = self.class.post("/messages", body: body, headers: { "authorization" => @auth_token})
+
+    create_message_response_body = JSON.parse(response.body)
+    pretty = JSON.pretty_generate create_message_response_body
+    puts pretty
+
   end
 
 end
