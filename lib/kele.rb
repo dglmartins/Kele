@@ -31,6 +31,7 @@ class Kele
     puts pretty
 
     @my_mentor_id = @me_response_body["current_enrollment"]["mentor_id"]
+    @my_enrollment_id = @me_response_body["current_enrollment"]["id"]
   end
 
   def get_mentor_availability
@@ -83,6 +84,23 @@ class Kele
     pretty = JSON.pretty_generate create_message_response_body
     puts pretty
 
+  end
+
+  def create_submission(assignment_branch, assigment_commit_link, checkpoint_id, comment)
+    self.get_me
+    body = {
+      "assignment_branch": assignment_branch,
+      "assigment_commit_link": assigment_commit_link,
+      "checkpoint_id": checkpoint_id,
+      "comment": comment,
+      "enrollment_id": @my_enrollment_id
+    }
+
+    response = self.class.post("/checkpoint_submissions", body: body, headers: { "authorization" => @auth_token})
+
+    submission_response_body = JSON.parse(response.body)
+    pretty = JSON.pretty_generate submission_response_body
+    puts pretty
   end
 
 end
