@@ -118,6 +118,7 @@ class Kele
     submission_response_body = JSON.parse(response.body)
     pretty = JSON.pretty_generate submission_response_body
     puts pretty
+    #add comment to update checkpoint
   end
 
 end
