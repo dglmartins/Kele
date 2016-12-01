@@ -65,11 +65,7 @@ class Kele
     end
   end
 
-  def create_message(token, subject, stripped_text)
-    self.get_me
-    sender = @email
-    recipient_id = @my_mentor_id
-
+  def create_message(sender, recipient_id, token, subject, stripped_text)
     body = {
       "sender": sender,
       "recipient_id": recipient_id,
@@ -86,14 +82,14 @@ class Kele
 
   end
 
-  def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment)
-    self.get_me
+  def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment, enrollment_id)
+
     body = {
       "assignment_branch": assignment_branch,
       "assignment_commit_link": assignment_commit_link,
       "checkpoint_id": checkpoint_id,
       "comment": comment,
-      "enrollment_id": @my_enrollment_id
+      "enrollment_id": enrollment_id
     }
 
     response = self.class.post("/checkpoint_submissions", body: body, headers: { "authorization" => @auth_token})
